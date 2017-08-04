@@ -8,6 +8,7 @@ def setup(filename):
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row)
+    return Portfolio(EQUITY)
 
 # Save holding info in data structure
 def process(row):
@@ -23,19 +24,24 @@ def display(l) :
          l[item].price, l[item].target_price))
 
 def main() :
-    setup('portfolio.csv')
-    portfolio = Portfolio(EQUITY)
+    portfolio = setup('portfolio.csv')
     while(1):
-        print('\n\n')
+        print('\n')
+        print('-------------------------------------------------------')
         func = input('Choose your operation:' +
         '\n\tcost - see book cost of stock (e.g cost googl)' +
         '\n\tsell - see profit | format: sell [code] [price] [share]' +
         '\n\tview - over view of portfolio (no paramater)' +
+        '\n\trest - restart the program' +
         '\n\tquit - exit\n')
+        print('-------------------------------------------------------')
         if (func == 'quit') :
             exit()
         elif (func == 'view'):
             display(EQUITY)
+        elif (cont == 'rest'):
+            portfolio = setup('portfolio.csv')
+            continue
         else :
             inputs = func.split(' ')
             if (inputs[0] == 'cost') :
@@ -45,5 +51,11 @@ def main() :
             elif (inputs[0] == 'sell') :
                 holding = EQUITY[inputs[1].upper()]
                 holding.sell(float(inputs[2]), float(inputs[3]))
+        print('-------------------------------------------------------')
+        cont = input('continue? [press enter]\n\t Type quit to exit\n')
+        if (cont == 'quit') :
+            exit()
+        else :
+            continue
 
 main()
