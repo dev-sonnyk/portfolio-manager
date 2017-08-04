@@ -29,12 +29,14 @@ def display(l) :
 def main() :
     setup('portfolio.csv')
     while(1):
-        display(EQUITY)
         print('\n\n')
         func = input('Choose your operation:' +
-        '\n\tcost - see book cost\n\tsell - see profit\n\tquit - exit\n')
+        '\n\tcost - see book cost\n\tsell - see profit' +
+        '\n\tview - over view of portfolio\n\tquit - exit\n')
         if (func == 'quit') :
             exit()
+        elif (func == 'view'):
+            display(EQUITY)
         else :
             inputs = func.split(' ')
             if (inputs[0] == 'cost') :
