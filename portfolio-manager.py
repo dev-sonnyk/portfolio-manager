@@ -1,12 +1,8 @@
 import csv
 from holding import *
+from portfolio import *
 
 EQUITY = {} #list of equity code
-
-class Portfolio:
-    def __init__(self, holdings) :
-        self.holdings = holdings
-
 
 def setup(filename):
     with open(filename, newline='') as csvfile :
@@ -28,11 +24,14 @@ def display(l) :
 
 def main() :
     setup('portfolio.csv')
+    portfolio = Portfolio(EQUITY)
     while(1):
         print('\n\n')
         func = input('Choose your operation:' +
-        '\n\tcost - see book cost\n\tsell - see profit' +
-        '\n\tview - over view of portfolio\n\tquit - exit\n')
+        '\n\tcost - see book cost of stock (e.g cost googl)' +
+        '\n\tsell - see profit | format: sell [code] [price] [share]' +
+        '\n\tview - over view of portfolio (no paramater)' +
+        '\n\tquit - exit\n')
         if (func == 'quit') :
             exit()
         elif (func == 'view'):
