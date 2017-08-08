@@ -3,23 +3,22 @@ import pandas as pd
 from holding import *
 from portfolio import *
 
-EQUITY = {} #list of equity code
-
 def setup(filename):
+    equity_dict = {}
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader : process(row)
-    portfolio = Portfolio(EQUITY)
+        for row in reader : process(row, equity_dict)
+    portfolio = Portfolio(equity_dict)
     portfolio.set_worth()
     portfolio.set_total_cost()
     return portfolio
 
 # Save holding info in data structure
-def process(row):
-    if (row[0] not in EQUITY) :
-        EQUITY[row[0]] = Holding(row[0], row[1], float(row[2]), float(row[3]))
+def process(row, equity_list):
+    if (row[0] not in equity_list) :
+        equity_list[row[0]] = Holding(row[0], row[1], float(row[2]), float(row[3]))
     else :
-        EQUITY[row[0]].buy(float(row[2]), float(row[3]))
+        equity_list[row[0]].buy(float(row[2]), float(row[3]))
 
 def display(d) :
     pdict = dict_to_pandas_friendly(d)
