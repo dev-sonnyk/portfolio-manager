@@ -11,3 +11,6 @@ class Portfolio:
     def set_worth(self) :
         for stock in self.holdings :
             self.worth += self.holdings[stock].recent_quote
+
+    def reset(self) :
+        self.holdings = {}

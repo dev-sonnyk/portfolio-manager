@@ -38,19 +38,23 @@ def main() :
         if (func == 'quit') :
             exit()
         elif (func == 'view'):
-            display(EQUITY)
-        elif (cont == 'rest'):
+            display(portfolio.holdings)
+        elif (func == 'rest'):
+            portfolio.reset()
             portfolio = setup('portfolio.csv')
-            continue
         else :
             inputs = func.split(' ')
             if (inputs[0] == 'cost') :
-                holding = EQUITY[inputs[1].upper()]
+                holding = portfolio.holdings[inputs[1].upper()]
                 print('book cost of %s:%s is  $%.2f' %
                 (holding.code, holding.market, holding.book_cost))
             elif (inputs[0] == 'sell') :
-                holding = EQUITY[inputs[1].upper()]
-                holding.sell(float(inputs[2]), float(inputs[3]))
+                if (len(inputs) < 4) :
+                    sell_amount = portfolio.holdings[inputs[1].upper()].shares
+                else :
+                    sell_amount = inputs[3]
+                holding = portfolio.holdings[inputs[1].upper()]
+                holding.sell(float(inputs[2]), float(sell_amount))
         print('-------------------------------------------------------')
         cont = input('continue? [press enter]\n\t Type quit to exit\n')
         if (cont == 'quit') :
