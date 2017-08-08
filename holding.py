@@ -1,3 +1,5 @@
+from google-finacne import *
+
 FEE = 9.95
 
 class Holding :
@@ -8,7 +10,7 @@ class Holding :
         self.shares = shares
         self.book_cost = self.price * self.shares + FEE
         self.target_price = (self.book_cost + FEE) / self.shares
-        self.recent_quote = 0
+        self.recent_quote = get_last_bid('%s:%s'%(market:code))
         print('Bought ' + str(shares) + ' of ' + self.code)
 
     def buy(self, price, shares):

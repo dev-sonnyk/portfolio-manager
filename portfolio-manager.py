@@ -1,4 +1,5 @@
 import csv
+import pandas as pd
 from holding import *
 from portfolio import *
 
@@ -8,7 +9,10 @@ def setup(filename):
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row)
-    return Portfolio(EQUITY)
+    portfolio = Portfolio(EQUITY)
+    portfolio.set_worth()
+    portfolio.set_total_cost()
+    return portfolio
 
 # Save holding info in data structure
 def process(row):
@@ -17,11 +21,28 @@ def process(row):
     else :
         EQUITY[row[0]].buy(float(row[2]), float(row[3]))
 
-def display(l) :
-    for item in l :
+def display(d) :
+    pdict = dict_to_pandas_friendly(d)
+    column = ['Code', 'Shares', 'Price', 'Target Price', 'Last Bid']
+    df = pd.DataFrame(pdict, columns=column)
+    print(df)
+    '''
+    for item in d :
         print('%s in %s : %d of $%.2f | break-even sell at $%.2f' %
         (l[item].code, l[item].market, l[item].shares,
          l[item].price, l[item].target_price))
+    '''
+
+def dict_to_pandas_friendly(d) :
+    pdict = {'Code':[], 'Shares':[], 'Price':[], 'Target Price':[],
+     'Last Bid':[]}
+    for key in d :
+        pdict['Code'].append('%s:%s'%(d[key].market,d[key].code))
+        pdict['Shares'].append(d[key].shares)
+        pdict['Price'].append('%.3f'%(d[key].price))
+        pdict['Target Price'].append('%.3f'%(d[key].target_price))
+        pdict['Last Bid'].append(d[key].recent_quote)
+    return pdict
 
 def main() :
     portfolio = setup('portfolio.csv')
