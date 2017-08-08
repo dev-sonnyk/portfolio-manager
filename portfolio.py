@@ -6,11 +6,11 @@ class Portfolio:
 
     def set_total_cost(self) :
         for stock in self.holdings :
-            self.total_cost += self.holdings[stock].book_cost
+            self.total_cost += float(self.holdings[stock].book_cost)
 
     def set_worth(self) :
         for stock in self.holdings :
-            self.worth += self.holdings[stock].recent_quote
+            self.worth += float(self.holdings[stock].recent_quote)
 
     def reset(self) :
         self.holdings = {}
