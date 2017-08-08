@@ -16,9 +16,9 @@ def setup(filename):
 # Save holding info in data structure
 def process(row, equity_list):
     if (row[0] not in equity_list) :
-        equity_list[row[0]] = Holding(row[0], row[1], float(row[2]), float(row[3]))
+        equity_list[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
     else :
-        equity_list[row[0]].buy(float(row[2]), float(row[3]))
+        equity_list[row[0]].buy(float(row[2]), int(row[3]))
 
 def display(d) :
     pdict = dict_to_pandas_friendly(d)
@@ -37,7 +37,7 @@ def dict_to_pandas_friendly(d) :
      'Last Bid':[]}
     for key in d :
         pdict['Code'].append('%s:%s'%(d[key].market,d[key].code))
-        pdict['Shares'].append(d[key].shares)
+        pdict['Shares'].append('%d'%(d[key].shares))
         pdict['Price'].append('%.3f'%(d[key].price))
         pdict['Target Price'].append('%.3f'%(d[key].target_price))
         pdict['Last Bid'].append(d[key].recent_quote)
@@ -46,7 +46,7 @@ def dict_to_pandas_friendly(d) :
 def main() :
     portfolio = setup('portfolio.csv')
     while(1):
-        print('\n')
+        print('')
         print('-------------------------------------------------------')
         func = input('Choose your operation:' +
         '\n\tcost - see book cost of stock (e.g cost googl)' +
@@ -67,10 +67,10 @@ def main() :
             if (inputs[0] == 'cost') :
                 holding = portfolio.holdings[inputs[1].upper()]
                 print('book cost of %s:%s is  $%.2f' %
-                (holding.code, holding.market, holding.book_cost))
+                (holding.market, holding.code, holding.book_cost))
             elif (inputs[0] == 'sell') :
                 if (len(inputs) < 4) :
-                    sell_amount = portfolio.holdings[inputs[1].upper()].shares
+                    sell_amount = int(portfolio.holdings[inputs[1].upper()].shares)
                 else :
                     sell_amount = inputs[3]
                 holding = portfolio.holdings[inputs[1].upper()]
