@@ -13,6 +13,19 @@ python3 portfolio-manager.py
 ## View
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/view.png)
 
+## Sell
+Without share amount (it will sell all shares)
+
+![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/sell-noparam.png)
+
+
+With share amount
+
+![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/sell.png)
+
+## Cost
+![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/cost.png)
+
 ## Thank you
 
 [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
