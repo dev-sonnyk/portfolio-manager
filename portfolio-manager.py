@@ -42,18 +42,22 @@ def dict_to_pandas_friendly(p) :
                                 d[key].price)) / d[key].price))
     return pdict
 
-def main() :
+if __name__ == '__main__' :
+    first = True
     portfolio = setup('portfolio.csv')
     while(1):
         print('')
         print('-------------------------------------------------------')
-        func = input('Choose your operation:' +
-        '\n\tcost - see book cost of stock (e.g cost googl)' +
-        '\n\tsell - see profit | format: sell [code] [price] [share]' +
-        '\n\tview - over view of portfolio (no paramater)' +
-        '\n\trest - restart the program' +
-        '\n\tquit - exit\n')
-        print('-------------------------------------------------------')
+        if (first) :
+            func = input('Choose your operation:' +
+            '\n\tcost - see book cost of stock (e.g cost googl)' +
+            '\n\tsell - see profit | format: sell [code] [price] [share]' +
+            '\n\tview - over view of portfolio (no paramater)' +
+            '\n\trest - restart the program' +
+            '\n\tquit - exit\n')
+            print('-------------------------------------------------------')
+        else :
+            func = input('Type your function here: ')
         if (func == 'quit') :
             exit()
         elif (func == 'view'):
@@ -64,9 +68,15 @@ def main() :
         else :
             inputs = func.split(' ')
             if (inputs[0] == 'cost') :
+                if (len(inputs) == 1) :
+                    print('%.2f'%(portfolio.total_cost))
+                else :
+                    holding = portfolio.holdings[inputs[1].upper()]
+                    print('book cost of %s:%s is  $%.2f' %
+                    (holding.market, holding.code, holding.book_cost))
+            elif (inputs[0] == 'buy') :
                 holding = portfolio.holdings[inputs[1].upper()]
-                print('book cost of %s:%s is  $%.2f' %
-                (holding.market, holding.code, holding.book_cost))
+                holding.buy(float(inputs[2]), float(inputs[3]))
             elif (inputs[0] == 'sell') :
                 if (len(inputs) < 4) :
                     sell_amount = int(portfolio.holdings[inputs[1].upper()].shares)
@@ -75,10 +85,11 @@ def main() :
                 holding = portfolio.holdings[inputs[1].upper()]
                 holding.sell(float(inputs[2]), float(sell_amount))
         print('-------------------------------------------------------')
+        first = False
+        '''
         cont = input('continue? [press enter]\n\t Type quit to exit\n')
         if (cont == 'quit') :
             exit()
         else :
             continue
-
-main()
+        '''
