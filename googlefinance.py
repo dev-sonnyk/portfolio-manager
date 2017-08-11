@@ -19,6 +19,4 @@ def request(symbols) :
     content = response.read().decode('ascii', 'ignore').strip()
     return content[3:]
 
-def get_last_bid(symbols) :
-    j = json.loads(request(symbols))[0]
-    return float(j['l'])
+def get_json(symbols) : return json.loads(request(symbols))

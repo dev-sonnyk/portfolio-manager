@@ -5,18 +5,21 @@ from portfolio import *
 
 def setup(filename):
     equity_dict = {}
+    request_symbols = []
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader : process(row, equity_dict)
+        for row in reader : process(row, equity_dict, request_symbols)
     portfolio = Portfolio(equity_dict)
+    portfolio.set_recent_quote(request_symbols)
     portfolio.set_worth()
     portfolio.set_total_cost()
     return portfolio
 
 # Save holding info in data structure
-def process(row, equity_list):
+def process(row, equity_list, symbols):
     if (row[0] not in equity_list) :
         equity_list[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
+        symbols.append('%s:%s'%(row[1], row[0]))
     else :
         equity_list[row[0]].buy(float(row[2]), int(row[3]))
 
