@@ -9,10 +9,8 @@ def setup(filename):
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row, equity_dict, request_symbols)
-    portfolio = Portfolio(equity_dict)
-    portfolio.set_recent_quote(request_symbols)
-    portfolio.set_worth()
-    portfolio.set_total_cost()
+    portfolio = Portfolio(equity_dict, request_symbols)
+    portfolio.update()
     return portfolio
 
 # Save holding info in data structure
@@ -29,6 +27,16 @@ def display(p) :
     'Last Bid', 'Change']
     df = pd.DataFrame(pdict, columns=column)
     print(df)
+    print('\nTotal Cost :\t$%.2f'%(p.total_cost))
+    print('\nTotal Worth :\t$%.2f'%(p.worth))
+
+    diff = p.worth - p.total_cost
+    pct = 100 * diff / p.total_cost
+    sign = '-' if diff < 0 else '+'
+    if diff < 0 : diff = diff * -1
+
+    print('\nTotal Change : %s$%.2f (%.2f%%)'%(sign, diff, pct))
+
 
 def dict_to_pandas_friendly(p) :
     d = p.holdings
@@ -40,7 +48,8 @@ def dict_to_pandas_friendly(p) :
         pdict['Price'].append('%.3f'%(d[key].price))
         pdict['Target Price'].append('%.3f'%(d[key].target_price))
         pdict['Last Bid'].append(d[key].recent_quote)
-        pdict['Percentage'].append('%.2f%%'%((100.0 * d[key].book_cost) / p.total_cost))
+        pdict['Percentage'].append('%.2f%%'%((100.0 * d[key].book_cost) /
+                                p.total_cost))
         pdict['Change'].append('%.2f%%'%((100 * (d[key].recent_quote -
                                 d[key].price)) / d[key].price))
     return pdict
@@ -49,7 +58,6 @@ if __name__ == '__main__' :
     first = True
     portfolio = setup('portfolio.csv')
     while(1):
-        print('')
         print('-------------------------------------------------------')
         if (first) :
             func = input('Choose your operation:' +
@@ -57,42 +65,39 @@ if __name__ == '__main__' :
             '\n\tsell - see profit | format: sell [code] [price] [share]' +
             '\n\tview - over view of portfolio (no paramater)' +
             '\n\trest - restart the program' +
-            '\n\tquit - exit\n')
+            '\n\tquit - exit\n>> ')
             print('-------------------------------------------------------')
         else :
-            func = input('Type your function here: ')
-        if (func == 'quit') :
+            func = input('>> ')
+        if (func.lower() == 'quit') :
             exit()
-        elif (func == 'view'):
+        elif (func.lower() == 'view'):
             display(portfolio)
-        elif (func == 'rest'):
+        elif (func.lower() == 'rest'):
             portfolio.reset()
             portfolio = setup('portfolio.csv')
         else :
-            inputs = func.split(' ')
+            inputs = func.lower().split(' ')
             if (inputs[0] == 'cost') :
                 if (len(inputs) == 1) :
                     print('%.2f'%(portfolio.total_cost))
                 else :
                     holding = portfolio.holdings[inputs[1].upper()]
-                    print('book cost of %s:%s is  $%.2f' %
+                    print('Book Cost of %s:%s is  $%.2f' %
                     (holding.market, holding.code, holding.book_cost))
             elif (inputs[0] == 'buy') :
                 holding = portfolio.holdings[inputs[1].upper()]
                 holding.buy(float(inputs[2]), float(inputs[3]))
+                portfolio.update()
             elif (inputs[0] == 'sell') :
-                if (len(inputs) < 4) :
-                    sell_amount = int(portfolio.holdings[inputs[1].upper()].shares)
-                else :
-                    sell_amount = inputs[3]
+                sell_amount = int(portfolio.holdings[inputs[1].upper()].shares) \
+                    if len(inputs) < 4 else inputs[3]
                 holding = portfolio.holdings[inputs[1].upper()]
                 holding.sell(float(inputs[2]), float(sell_amount))
+                portfolio.update()
         print('-------------------------------------------------------')
         first = False
         '''
         cont = input('continue? [press enter]\n\t Type quit to exit\n')
-        if (cont == 'quit') :
-            exit()
-        else :
-            continue
+        exit() if (cont == 'quit') else continue
         '''
