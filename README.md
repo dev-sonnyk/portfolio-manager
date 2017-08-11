@@ -12,19 +12,19 @@ python3 portfolio-manager.py
 
 ## View
 
-Format : view
+#### Format : view
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/view.png)
 
 ## Buy
 
-Format : buy *code* *price* *share_amount*
+#### Format : buy *[code]* *[price]* *[share_amount]*
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/buy.png)
 
 ## Sell
 
-Format : sell *code* *price* *share_amount*
+#### Format : sell *[code]* *[price]* *[share_amount (optional)]*
 
 Without share amount (it will sell all shares)
 
@@ -37,13 +37,13 @@ With share amount
 
 ## Cost
 
-Format : cost *code*
+#### Format : cost *[code]*
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/cost.png)
 
 ## Restart
 
-Format : rest
+#### Format : rest
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/restart.png)
 
