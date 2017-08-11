@@ -21,4 +21,4 @@ def request(symbols) :
 
 def get_last_bid(symbols) :
     j = json.loads(request(symbols))[0]
-    return j['l']
+    return float(j['l'])

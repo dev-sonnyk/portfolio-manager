@@ -20,27 +20,26 @@ def process(row, equity_list):
     else :
         equity_list[row[0]].buy(float(row[2]), int(row[3]))
 
-def display(d) :
-    pdict = dict_to_pandas_friendly(d)
-    column = ['Code', 'Shares', 'Price', 'Target Price', 'Last Bid']
+def display(p) :
+    pdict = dict_to_pandas_friendly(p)
+    column = ['Percentage', 'Code', 'Shares', 'Price', 'Target Price',
+    'Last Bid', 'Change']
     df = pd.DataFrame(pdict, columns=column)
     print(df)
-    '''
-    for item in d :
-        print('%s in %s : %d of $%.2f | break-even sell at $%.2f' %
-        (l[item].code, l[item].market, l[item].shares,
-         l[item].price, l[item].target_price))
-    '''
 
-def dict_to_pandas_friendly(d) :
+def dict_to_pandas_friendly(p) :
+    d = p.holdings
     pdict = {'Code':[], 'Shares':[], 'Price':[], 'Target Price':[],
-     'Last Bid':[]}
-    for key in d :
+     'Last Bid':[], 'Percentage':[], 'Change':[]}
+    for key in p.holdings :
         pdict['Code'].append('%s:%s'%(d[key].market,d[key].code))
         pdict['Shares'].append('%d'%(d[key].shares))
         pdict['Price'].append('%.3f'%(d[key].price))
         pdict['Target Price'].append('%.3f'%(d[key].target_price))
         pdict['Last Bid'].append(d[key].recent_quote)
+        pdict['Percentage'].append('%.2f%%'%((100.0 * d[key].book_cost) / p.total_cost))
+        pdict['Change'].append('%.2f%%'%((100 * (d[key].recent_quote -
+                                d[key].price)) / d[key].price))
     return pdict
 
 def main() :
@@ -58,7 +57,7 @@ def main() :
         if (func == 'quit') :
             exit()
         elif (func == 'view'):
-            display(portfolio.holdings)
+            display(portfolio)
         elif (func == 'rest'):
             portfolio.reset()
             portfolio = setup('portfolio.csv')
