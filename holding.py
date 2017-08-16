@@ -9,7 +9,7 @@ class Holding :
         self.book_cost = self.price * self.shares + FEE
         self.target_price = (self.book_cost + FEE) / self.shares
         self.recent_quote = 0
-        print('Bought ' + str(shares) + ' of ' + self.code)
+        print('Bought %d of %s -> $%.2f'%(shares, self.code, price * shares))
 
     def get_recent_quote(self) :
         self.recent_quote = get_json('%s:%s'%(self.market, self.code))[0]['l']
@@ -24,7 +24,7 @@ class Holding :
         self.shares += shares
         self.book_cost += (new_cost + FEE)
         self.target_price = (self.book_cost + FEE) / self.shares
-        print('Bought ' + str(shares) + ' of ' + self.code)
+        print('Bought %d of %s -> $%.2f'%(shares, self.code, price * shares))
 
     def sell(self, price, shares) :
         diff = (price - self.target_price) * shares
@@ -33,7 +33,7 @@ class Holding :
             diff = diff * (-1)
         else :
             result = 'Profit'
-        print('%s of $%.2f' % (result, diff))
+        print('$%.2f returned -> %s of $%.2f' % (price * shares, result, diff))
         self.shares -= shares
         self.book_cost -= price * shares
         self.set_target_price()
