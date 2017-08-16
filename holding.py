@@ -35,5 +35,5 @@ class Holding :
             result = 'Profit'
         print('$%.2f returned -> %s of $%.2f' % (price * shares, result, diff))
         self.shares -= shares
-        self.book_cost -= price * shares
+        self.book_cost -= price * shares if self.shares != 0 else 0
         self.set_target_price()
