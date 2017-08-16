@@ -34,6 +34,12 @@ class Holding :
         else :
             result = 'Profit'
         print('$%.2f returned -> %s of $%.2f' % (price * shares, result, diff))
+
+        # Update info
         self.shares -= shares
-        self.book_cost -= price * shares if self.shares != 0 else 0
+        if (self.shares == 0) :
+            self.price = 0
+            self.book_cost = 0
+        else :
+            self.book_cost -= price * shares
         self.set_target_price()
