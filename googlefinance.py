@@ -4,7 +4,8 @@ try :
     from urllib.request import Request, urlopen
     import urllib.error
 except ImportError :
-    from urllib2 import Request, urlopen, HTTPError, URLError
+    print('Download Python3 and urllib')
+    exit()
 
 BASE = 'http://finance.google.com/finance/info?client=ig&q='
 
