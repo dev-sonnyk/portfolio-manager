@@ -24,9 +24,9 @@ python3 portfolio-manager.py
 
 ## Sell
 
-> Format : sell *[code]* *[price]* *[share_amount (optional)]*
+> Format : sell *[code]* *[price (optional)]* *[share_amount (optional)]*
 
-Without share amount (it will sell all shares)
+Without share amount (it will sell all shares) / Without price will sell at last bid price
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/sell-noparam.png)
 
