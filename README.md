@@ -1,10 +1,10 @@
-This is my console application for my investment portfolio management.  (Requires Python 3.x, Pandas, urllib)
+This is a console application for my investment portfolio management.  (Requires Python 3.x, Pandas, urllib)
 
 ## How to use it
 
 Go to this application directory and type 
 ```
-python3 portfolio-manager.py
+python3 simulator.py
 ```
 
 ## Setup
