@@ -20,7 +20,7 @@ class Portfolio:
                             self.holdings[stock].shares)
 
     def set_recent_quote(self) :
-        js = get_json(self.symbols)
+        js = request(self.symbols)
         for j in js :
             if (j['t'] not in self.holdings) :
                 print('Wrong code (%s) bro.'%(j['t']))
