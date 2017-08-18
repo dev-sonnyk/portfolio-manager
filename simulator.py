@@ -4,6 +4,7 @@ from holding import *
 from portfolio import *
 
 HELP = 'Choose your operation:' + \
+'\n\tcash - deposit or withdrawl fund (in/out/set) | format: cash [func] [$]' + \
 '\n\tcost - see book cost of stock | format: cost [code]' + \
 '\n\tsell - see profit | format: sell [code] [price] [share]' + \
 '\n\tbuy - buy equity | format: buy [code] [price] [share]' + \
@@ -57,6 +58,7 @@ def display(p) :
     'Last Bid', 'Change']
     df = pd.DataFrame(pdict, columns=column)
     print(df)
+    print('\nAvailable Fund:\t$%.2f'%(p.fund))
     print('\nTotal Cost :\t$%.2f'%(p.total_cost))
     print('\nTotal Worth :\t$%.2f'%(p.worth))
 
@@ -90,6 +92,17 @@ def restart(p, inputs) :
     p = setup('portfolio.csv')
     return p
 
+def cash(p, inputs) :
+    try :
+        if (inputs[1] == 'in' and inputs[2] != '') :
+            p.fund += float(inputs[2])
+        elif (inputs[1] == 'out' and inputs[2] != '') :
+            p.fund -= float(inputs[2])
+        elif (inputs[1] == 'set' and inputs[2] != '') :
+            p.fund = float(inputs[2])
+    except ValueError :
+        print('Invalid input - Try again')
+
 def cost(p, inputs) :
     code = inputs[1].upper()
     if (code not in p.holdings) :
@@ -110,6 +123,7 @@ def buy_action(p, inputs) :
         '''
         holding = p.holdings[code]
         holding.buy(float(inputs[2]), int(inputs[3]))
+        p.fund -= float(inputs[2]) * int(inputs[3])
         p.update()
     else :
         print ('Invalid format. >> buy [code] [price] [share]')
@@ -123,13 +137,14 @@ def sell_action(p, inputs) :
             if (len(inputs) == 2 and inputs[2] != '')  else inputs[2]
         holding = p.holdings[code]
         holding.sell(float(sell_price), int(sell_amount))
+        p.fund += sell_price * sell_amount
         p.update()
     except IndexError or ValueError :
         print('Ivalid format - Try again')
 
-# Available functions in dictionary to lookup 
+# Available functions in dictionary to lookup
 methods = {'quit' : out, 'help' : help_message, 'view' : view, 'rest' : restart,
-            'cost' : cost, 'buy' : buy_action, 'sell' : sell_action}
+            'cost' : cost, 'buy' : buy_action, 'sell' : sell_action, 'cash': cash}
 
 # Main method
 if __name__ == '__main__' :
