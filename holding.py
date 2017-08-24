@@ -41,5 +41,5 @@ class Holding :
             self.price = 0
             self.book_cost = 0
         else :
-            self.book_cost -= price * shares
+            self.book_cost = self.price * self.shares
         self.set_target_price()
