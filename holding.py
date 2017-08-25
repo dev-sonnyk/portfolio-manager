@@ -27,13 +27,9 @@ class Holding :
         print('Bought %d of %s -> $%.2f'%(shares, self.code, price * shares))
 
     def sell(self, price, shares) :
-        diff = (price - self.target_price) * shares
-        if diff < 0 :
-            result = 'Loss'
-            diff = diff * (-1)
-        else :
-            result = 'Profit'
-        print('$%.2f returned -> %s of $%.2f' % (price * shares, result, diff))
+        diff = (abs(price) - self.target_price) * shares
+        sign = 'Loss' if diff < 0 else 'Profit'
+        print('$%.2f returned -> %s of $%.2f'%(price * shares, sign, abs(diff)))
 
         # Update info
         self.shares -= shares
@@ -43,3 +39,4 @@ class Holding :
         else :
             self.book_cost = self.price * self.shares
         self.set_target_price()
+        return diff

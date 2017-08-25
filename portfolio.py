@@ -8,6 +8,7 @@ class Portfolio:
         self.total_cost = 0
         self.worth = 0
         self.fund = 0
+        self.perform = 0
 
     def set_total_cost(self) :
         self.total_cost = 0

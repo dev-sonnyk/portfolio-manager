@@ -16,20 +16,24 @@ HELP = 'Choose your operation:' + \
 def setup(filename):
     equity_dict = {}
     request_symbols = []
+    portfolio = Portfolio(equity_dict, request_symbols)
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
-        for row in reader : process(row, equity_dict, request_symbols)
-    portfolio = Portfolio(equity_dict, request_symbols)
+        for row in reader : process(row, portfolio)
     portfolio.update()
     return portfolio
 
 # Save holding info in data structure
-def process(row, equity_list, symbols):
-    if (row[0] not in equity_list) :
-        equity_list[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
-        symbols.append('%s:%s'%(row[1], row[0]))
+def process(row, p):
+    if (row[0] not in p.holdings) :
+        p.holdings[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
+        p.symbols.append('%s:%s'%(row[1], row[0]))
     else :
-        equity_list[row[0]].buy(float(row[2]), int(row[3]))
+        if float(row[2]) > 0 :
+            p.holdings[row[0]].buy(float(row[2]), int(row[3]))
+        else :
+            p.perform += p.holdings[row[0]].sell(float(row[2]), int(row[3]))
+            p.fund += float(row[2]) * -1 * int(row[3])
 
 def display(p) :
     p.set_total_cost()
@@ -59,15 +63,16 @@ def display(p) :
     df = pd.DataFrame(pdict, columns=column)
     print(df)
     print('\nAvailable Fund:\t$%.2f'%(p.fund))
+    psign = '-' if p.perform < 0 else ''
+    print('Performance:\t%s$%.2f'%(psign, abs(p.perform)))
     print('\nTotal Cost :\t$%.2f'%(p.total_cost))
     print('\nTotal Worth :\t$%.2f'%(p.worth))
 
     diff = p.worth - p.total_cost
     pct = 100 * diff / p.total_cost
-    sign = '-' if diff < 0 else '+'
-    if diff < 0 : diff = diff * -1
+    sign = '-' if diff < 0 else ''
 
-    print('\nTotal Change : %s$%.2f (%.2f%%)'%(sign, diff, pct))
+    print('\nTotal Change : %s$%.2f (%.2f%%)'%(sign, abs(diff), pct))
 
 def equity_validation(p, code, share) :
     if (code not in p.holdings) :
@@ -96,10 +101,13 @@ def cash(p, inputs) :
     try :
         if (inputs[1] == 'in' and inputs[2] != '') :
             p.fund += float(inputs[2])
+            print('Cashed in $%.2f\nFund = $%.2f '%(float(inputs[2]), p.fund))
         elif (inputs[1] == 'out' and inputs[2] != '') :
             p.fund -= float(inputs[2])
+            print('Cashed out $%.2f\nFund = $%.2f '%(float(inputs[2]), p.fund))
         elif (inputs[1] == 'set' and inputs[2] != '') :
             p.fund = float(inputs[2])
+            print('Fund = $%.2f'%(float(inputs[2])))
     except ValueError :
         print('Invalid input - Try again')
 
@@ -131,16 +139,18 @@ def buy_action(p, inputs) :
 def sell_action(p, inputs) :
     try :
         code = inputs[1].upper()
-        sell_amount = int(p.holdings[code].shares) \
-            if (len(inputs) == 3 and inputs[3] != '') else inputs[3]
-        sell_price = p.holdings[code].recent_quote \
-            if (len(inputs) == 2 and inputs[2] != '')  else inputs[2]
         holding = p.holdings[code]
-        holding.sell(float(sell_price), int(sell_amount))
-        p.fund += sell_price * sell_amount
+        sell_price = holding.recent_quote \
+            if (len(inputs) == 2)  else inputs[2]
+        sell_amount = int(holding.shares) \
+            if (len(inputs) == 3) else inputs[3]
+        p.perform += holding.sell(float(sell_price), int(sell_amount))
+        p.fund += float(sell_price) * int(sell_amount)
         p.update()
-    except IndexError or ValueError :
+    except IndexError :
         print('Ivalid format - Try again')
+    except ValueError :
+        print('Weird value bro.')
 
 # Available functions in dictionary to lookup
 methods = {'quit' : out, 'help' : help_message, 'view' : view, 'rest' : restart,
