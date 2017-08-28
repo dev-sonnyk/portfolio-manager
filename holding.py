@@ -29,7 +29,8 @@ class Holding :
     def sell(self, price, shares) :
         diff = (abs(price) - self.target_price) * shares
         sign = 'Loss' if diff < 0 else 'Profit'
-        print('$%.2f returned -> %s of $%.2f'%(price * shares, sign, abs(diff)))
+        print('$%.2f returned -> %s of $%.2f'%(abs(price) * shares - FEE,
+                    sign, abs(diff)))
 
         # Update info
         self.shares -= shares

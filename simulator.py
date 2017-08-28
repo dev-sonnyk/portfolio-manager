@@ -12,6 +12,7 @@ HELP = 'Choose your operation:' + \
 '\n\trest - restart the program | format: rest' + \
 '\n\tquit - exit | format: exit\n' + \
 '-------------------------------------------------------'
+FEE = 9.95
 
 def setup(filename):
     equity_dict = {}
@@ -33,7 +34,7 @@ def process(row, p):
             p.holdings[row[0]].buy(float(row[2]), int(row[3]))
         else :
             p.perform += p.holdings[row[0]].sell(float(row[2]), int(row[3]))
-            p.fund += float(row[2]) * -1 * int(row[3])
+            p.fund += (abs(float(row[2])) * int(row[3]) - FEE)
 
 def display(p) :
     p.set_total_cost()
@@ -145,7 +146,7 @@ def sell_action(p, inputs) :
         sell_amount = int(holding.shares) \
             if (len(inputs) == 3) else inputs[3]
         p.perform += holding.sell(float(sell_price), int(sell_amount))
-        p.fund += float(sell_price) * int(sell_amount)
+        p.fund += (float(sell_price) * int(sell_amount) - FEE)
         p.update()
     except IndexError :
         print('Ivalid format - Try again')
