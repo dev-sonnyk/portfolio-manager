@@ -30,6 +30,8 @@ def process(row, p):
         amount = float(row[2])
         # Dividend (cash in) or cash out occasion
         p.fund = p.fund - amount if row[1] == 'OUT' else p.fund + amount
+        if row[1] == 'IN-DIV' : p.perform += amount
+        
         print('CASHED %s $%.2f'%(row[1], amount))
     elif (row[0] not in p.holdings) :
         p.holdings[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
