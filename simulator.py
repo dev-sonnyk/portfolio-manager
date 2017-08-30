@@ -26,7 +26,12 @@ def setup(filename):
 
 # Save holding info in data structure
 def process(row, p):
-    if (row[0] not in p.holdings) :
+    if (row[0] == 'CASH'):
+        amount = float(row[2])
+        # Dividend (cash in) or cash out occasion
+        p.fund = p.fund - amount if row[1] == 'OUT' else p.fund + amount
+        print('CASHED %s $%.2f'%(row[1], amount))
+    elif (row[0] not in p.holdings) :
         p.holdings[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
         p.symbols.append('%s:%s'%(row[1], row[0]))
     else :
@@ -100,13 +105,13 @@ def restart(p, inputs) :
 
 def cash(p, inputs) :
     try :
-        if (inputs[1] == 'in' and inputs[2] != '') :
+        if (inputs[1].lower() == 'in' and inputs[2] != '') :
             p.fund += float(inputs[2])
             print('Cashed in $%.2f\nFund = $%.2f '%(float(inputs[2]), p.fund))
-        elif (inputs[1] == 'out' and inputs[2] != '') :
+        elif (inputs[1].lower() == 'out' and inputs[2] != '') :
             p.fund -= float(inputs[2])
             print('Cashed out $%.2f\nFund = $%.2f '%(float(inputs[2]), p.fund))
-        elif (inputs[1] == 'set' and inputs[2] != '') :
+        elif (inputs[1].lower() == 'set' and inputs[2] != '') :
             p.fund = float(inputs[2])
             print('Fund = $%.2f'%(float(inputs[2])))
     except ValueError :
