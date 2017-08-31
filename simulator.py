@@ -22,6 +22,8 @@ def setup(filename):
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row, portfolio)
     portfolio.update()
+    # Delete this when you sell
+    portfolio.holdings['GBTC'].recent_quote = 1050
     return portfolio
 
 # Save holding info in data structure
@@ -31,7 +33,7 @@ def process(row, p):
         # Dividend (cash in) or cash out occasion
         p.fund = p.fund - amount if row[1] == 'OUT' else p.fund + amount
         if row[1] == 'IN-DIV' : p.perform += amount
-        
+
         print('CASHED %s $%.2f'%(row[1], amount))
     elif (row[0] not in p.holdings) :
         p.holdings[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
