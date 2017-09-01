@@ -1,4 +1,5 @@
 import csv
+import os
 import pandas as pd
 from holding import *
 from portfolio import *
@@ -22,8 +23,6 @@ def setup(filename):
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row, portfolio)
     portfolio.update()
-    # Delete this when you sell
-    portfolio.holdings['GBTC'].recent_quote = 1050
     return portfolio
 
 # Save holding info in data structure
@@ -98,6 +97,8 @@ def equity_validation(p, code, share) :
 
 def out(p, inputs) : exit()
 
+def clean(p, inputs) : os.system('clear')
+
 def help_message(p, inputs) : print(HELP)
 
 def view(p, inputs) : display(p)
@@ -163,8 +164,9 @@ def sell_action(p, inputs) :
         print('Weird value bro.')
 
 # Available functions in dictionary to lookup
-methods = {'quit' : out, 'help' : help_message, 'view' : view, 'rest' : restart,
-            'cost' : cost, 'buy' : buy_action, 'sell' : sell_action, 'cash': cash}
+methods = {'quit' : out, 'clear' : clean, 'help' : help_message, 'view' : view,
+            'rest' : restart, 'cost' : cost, 'buy' : buy_action,
+            'sell' : sell_action, 'cash': cash}
 
 # Main method
 if __name__ == '__main__' :
