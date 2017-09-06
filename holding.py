@@ -11,9 +11,6 @@ class Holding :
         self.recent_quote = 0
         print('Bought %d of %s -> $%.2f'%(shares, self.code, price * shares))
 
-    def get_recent_quote(self) :
-        self.recent_quote = get_json('%s:%s'%(self.market, self.code))[0]['l']
-
     def set_target_price(self) :
         self.target_price = (self.book_cost + FEE) / self.shares \
             if self.shares != 0 else 0

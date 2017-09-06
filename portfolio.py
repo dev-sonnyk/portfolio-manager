@@ -1,5 +1,7 @@
-from googlefinance import *
+#from googlefinance import *
+from alpha import *
 import json
+import os
 
 class Portfolio:
     def __init__(self, holdings, symbols) :
@@ -22,12 +24,21 @@ class Portfolio:
                             self.holdings[stock].shares)
 
     def set_recent_quote(self) :
+        '''
+        # Google Finance API
         js = request(self.symbols)
         for j in js :
             if (j['t'] not in self.holdings) :
                 print('Wrong code (%s) bro.'%(j['t']))
             else :
                 self.holdings[j['t']].recent_quote = float(j['l'])
+        '''
+        # Alphavantage API
+        for s in self.holdings :
+            stock = self.holdings[s]
+            self.holdings[s].recent_quote = \
+                float(request(stock.code, stock.market))
+        os.system('clear')
 
     def update(self) :
         self.set_recent_quote()
