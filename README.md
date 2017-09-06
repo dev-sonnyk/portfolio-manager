@@ -1,5 +1,9 @@
 This is a console application for my investment portfolio management.  (Requires Python 3.x, Pandas, urllib)
 
+Sep.6.2017 >> Google Finacne API stopped working.  I am trying to replace real-time quote with https://www.alphavantage.co/
+
+API Key = MMQ0UDNZAOQI7XUZ
+
 ## How to use it
 
 Go to this application directory and type 
