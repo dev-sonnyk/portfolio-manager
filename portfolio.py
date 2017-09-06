@@ -41,8 +41,12 @@ class Portfolio:
         os.system('clear')
 
     def update(self) :
-        self.set_recent_quote()
-        self.set_total_cost()
-        self.set_worth()
+        try :
+            self.set_recent_quote()
+            self.set_total_cost()
+            self.set_worth()
+            return 1
+        except KeyError :
+            return 0
 
     def reset(self) : self.holdings = {}

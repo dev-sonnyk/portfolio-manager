@@ -22,7 +22,8 @@ def setup(filename):
     with open(filename, newline='') as csvfile :
         reader = csv.reader(csvfile, delimiter=',')
         for row in reader : process(row, portfolio)
-    portfolio.update()
+    while portfolio.update() != 1 :
+        portfolio.update()
     return portfolio
 
 # Save holding info in data structure
