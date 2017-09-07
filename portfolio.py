@@ -36,8 +36,10 @@ class Portfolio:
         # Alphavantage API
         for s in self.holdings :
             stock = self.holdings[s]
-            self.holdings[s].recent_quote = \
-                float(request(stock.code, stock.market))
+            last_close = float(request(stock.code, stock.market))
+            while last_close == -1 :
+                last_close = float(request(stock.code, stock.market))
+            self.holdings[s].recent_quote = last_close
         os.system('clear')
 
     def update(self) :

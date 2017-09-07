@@ -9,12 +9,16 @@ BASE = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY' \
 def request(symbol, market) :
     url = BASE + symbol.upper()
     if market == 'TSE' : url += '.TO'
-    response = urlopen(url)
-    content = response.read()
 
     ## This only works for US stocks
     # now = datetime.now().strftime('%Y-%m-%d %H:%M:00')
     # json.loads(content)['Time Series (1min)'][now]
-    print('Processing ' + symbol)
-    for quote in json.loads(content)['Time Series (1min)'] :
-        return json.loads(content)['Time Series (1min)'][quote]['4. close']
+    try :
+        response = urlopen(url)
+        content = response.read()
+        print('Price retreived : ' + symbol)
+        for quote in json.loads(content)['Time Series (1min)'] :
+            return json.loads(content)['Time Series (1min)'][quote]['4. close']
+    except urllib.error.URLError :
+        print('Failed ' + symbol)
+        return -1
