@@ -11,14 +11,20 @@ Go to this application directory and type
 python3 simulator.py
 ```
 
-## Setup
-![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/setup.png)
-
 ## View
 
 > Format : view
 
 ![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/view.png)
+
+## Setup
+![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/setup.png)
+
+## Help
+
+> Format : help
+
+![alt text](https://github.com/dev-sonnyk/portfolio-manager/raw/master/images/help.png)
 
 ## Buy
 
