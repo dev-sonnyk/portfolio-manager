@@ -3,7 +3,9 @@ from urllib.request import urlopen
 import urllib.error
 from datetime import datetime, date
 
-BASE = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY' \
+FUNC = 'TIME_SERIES_INTRADAY'
+#FUNC = 'TIME_SERIES_DAILY_ADJUSTED'
+BASE = 'https://www.alphavantage.co/query?function=' +  FUNC + \
      '&interval=1min&apikey=MMQ0UDNZAOQI7XUZ&outputsize=compact&symbol='
 
 def request(symbol, market) :
