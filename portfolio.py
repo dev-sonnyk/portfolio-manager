@@ -51,4 +51,8 @@ class Portfolio:
         except KeyError :
             return 0
 
+    def remove(self, code, market) :
+        del self.holdings[code]
+        self.symbols.remove('%s:%s'%(market,code))
+
     def reset(self) : self.holdings = {}

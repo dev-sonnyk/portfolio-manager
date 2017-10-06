@@ -29,17 +29,19 @@ def setup(filename):
 
 # Save holding info in data structure
 def process(row, p):
-    if (row[0] == 'CASH'):
+    if (row[0] == 'CASH') : #CASH [IN/OUT/IN-DIV] [amount]
         amount = float(row[2])
         # Dividend (cash in) or cash out occasion
         p.fund = p.fund - amount if row[1] == 'OUT' else p.fund + amount
         if row[1] == 'IN-DIV' : p.perform += amount
 
         print('CASHED %s $%.2f'%(row[1], amount))
+    elif (row[0] == 'DEL') : #DEL [code] [market]
+        p.remove(row[1],row[2])
     elif (row[0] not in p.holdings) :
         p.holdings[row[0]] = Holding(row[0], row[1], float(row[2]), int(row[3]))
         p.symbols.append('%s:%s'%(row[1], row[0]))
-    else :
+    else : #[code] [market] [shares] [price]
         if float(row[2]) > 0 :
             p.holdings[row[0]].buy(float(row[2]), int(row[3]))
         else :
