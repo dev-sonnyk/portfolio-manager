@@ -1,4 +1,6 @@
-This is a console application for my investment portfolio management.  (Requires Python 3.x, Pandas, urllib)
+This is a console application for my investment portfolio management.  (Requires Python 3.x, Pandas, urllib, requests, numPy)
+
+If a program doesn't run properly, make sure you "pip3 install" any libraries missing. 
 
 Sep.6.2017 >> Google Finacne API stopped working.  I am trying to replace real-time quote with https://www.alphavantage.co/
 
