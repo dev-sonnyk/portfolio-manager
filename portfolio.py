@@ -1,5 +1,5 @@
-#from alpha import *
-from yahoo import *
+from alpha import *
+#from yahoo import *
 import json
 import os
 
@@ -24,7 +24,7 @@ class Portfolio:
                             self.holdings[stock].shares)
 
     def set_recent_quote(self) :
-        '''
+
         # Alphavantage API
         for s in self.holdings :
             stock = self.holdings[s]
@@ -50,6 +50,7 @@ class Portfolio:
         for s in self.holdings :
             self.holdings[s].recent_quote = float(quotes[i])
             i += 1
+        '''
 
         os.system('clear')
 

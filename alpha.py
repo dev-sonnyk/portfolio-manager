@@ -1,5 +1,6 @@
 import json
 from urllib.request import urlopen
+import requests
 import urllib.error
 from datetime import datetime, date
 
@@ -14,13 +15,13 @@ def request(symbol, market) :
 
     ## This only works for US stocks
     # now = datetime.now().strftime('%Y-%m-%d %H:%M:00')
-    # json.loads(content)['Time Series (1min)'][now]
+# json.loads(content)['Time Series (1min)'][now]
+
     try :
-        response = urlopen(url)
-        content = response.read()
-        print('Price retreived : ' + symbol)
-        for quote in json.loads(content)['Time Series (1min)'] :
-            return json.loads(content)['Time Series (1min)'][quote]['4. close']
+        response = requests.get(url)
+        result = json.loads(response.text)['Time Series (1min)']
+        for quote in result :
+            return result[quote]['4. close']
     except urllib.error.URLError :
         print('Failed ' + symbol)
         return -1
